@@ -20,7 +20,7 @@ public class Application {
             screen.startScreen();
             screen.doResizeIfNecessary();
             screen.clear();
-            screen.setCharacter(10, 10, TextCharacter.fromCharcter('X')[0]);
+            screen.setCharacter(10, 10, TextCharacter.fromCharacter('X')[0]);
             screen.refresh();
 
         } catch (IOException e) {
