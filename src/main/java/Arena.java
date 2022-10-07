@@ -18,12 +18,14 @@ public class Arena {
     Hero hero = new Hero(10, 10);
     private List<Wall> walls = new ArrayList<Wall>();
     private List<Coin> coins = new ArrayList<Coin>();
+    private List<Monster> monsters = new ArrayList<Monster>();
 
     Arena(int h, int w) {
         this.height = h;
         this.width = w;
         this.walls = createWalls();
         this.coins = createCoins();
+        this.monsters = createMonsters();
     }
 
     public void setHeight(int height) {
@@ -43,6 +45,7 @@ public class Arena {
     }
 
     public void processKey(KeyStroke key, Screen screen) throws IOException {
+        verifyMonsterCollisions(screen);
         switch (key.getKeyType()) {
             case ArrowUp -> moveHero(hero.moveUp());
             case ArrowDown -> moveHero(hero.moveDown());
@@ -54,6 +57,8 @@ public class Arena {
                 }
             }
         }
+        moveMonsters();
+        verifyMonsterCollisions(screen);
     }
 
     public void moveHero(Position position) {
@@ -77,6 +82,8 @@ public class Arena {
             wall.draw(graphics);
         for (Coin coin : coins)
             coin.draw(graphics);
+        for (Monster monster : monsters)
+            monster.draw(graphics);
         hero.draw(graphics);
     }
 
@@ -129,8 +136,53 @@ public class Arena {
             }
         }
         if(OC) coins.remove(temp);
-        System.out.print("Coins: ");
-        System.out.println(hero.getCoins());
+    }
+
+    private List<Monster> createMonsters() {
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        for (int i = 0; i < 3; i++){
+            boolean ND = false;
+            Monster tempm = new Monster(random.nextInt(width - 2) + 1,
+                    random.nextInt(height - 2) + 1);
+            if(tempm.getPosition().equals(hero.getPosition())){
+                i--;
+                ND = true;
+            }
+            else if(!ND){
+                for(Monster monster : monsters){
+                    if(monster.getPosition().equals(tempm.getPosition())){
+                        i--;
+                        ND=true;
+                    }
+                }
+            }
+            else {
+                for(Coin coin : coins){
+                    if(coin.getPosition().equals(tempm.getPosition())){
+                        i--;
+                        ND = true;
+                    }
+                }
+            }
+            if(!ND) monsters.add(tempm);
+        }
+        return monsters;
+    }
+
+    private void moveMonsters(){
+        for(Monster monster : monsters) monster.move(hero);
+    }
+
+    private void verifyMonsterCollisions(Screen screen) throws IOException {
+        for(Monster monster : monsters){
+            if(monster.getPosition().equals(hero.getPosition())) {
+                System.out.print("You collected: ");
+                System.out.print(hero.getCoins());
+                System.out.println(" Coins!");
+                screen.close();
+            }
+        }
     }
 
 }
