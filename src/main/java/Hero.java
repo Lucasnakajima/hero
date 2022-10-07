@@ -7,8 +7,14 @@ import com.googlecode.lanterna.screen.Screen;
 
 public class Hero extends Element{
 
+   private int coins = 0;
+
     Hero(int x, int y){
         super(x,y);
+    }
+
+    public int getCoins() {
+        return coins;
     }
 
     void draw(TextGraphics graphics){
@@ -16,6 +22,10 @@ public class Hero extends Element{
         graphics.enableModifiers(SGR.BOLD);
         graphics.putString(new TerminalPosition(getX(),
                 getY()), "X");
+    }
+
+    public void addcoin(){
+        coins++;
     }
 
     public Position moveUp(){
