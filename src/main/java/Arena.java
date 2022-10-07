@@ -6,16 +6,20 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
 
+import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Arena {
     private int height;
     private int width;
     Hero hero = new Hero(10, 10);
+    private List<Wall> walls;
 
     Arena(int h, int w) {
         this.height = h;
         this.width = w;
+        this.walls = createWalls();
     }
 
     public void setHeight(int height) {
@@ -67,5 +71,16 @@ public class Arena {
         hero.draw(graphics);
     }
 
+    private List<Wall> createWalls() {
+        for (int c = 0; c < width; c++) {
+            walls.add(new Wall(c, 0));
+            walls.add(new Wall(c, height - 1));
+        }
+        for (int r = 1; r < height - 1; r++) {
+            walls.add(new Wall(0, r));
+            walls.add(new Wall(width - 1, r));
+        }
+        return walls;
+    }
 
 }
