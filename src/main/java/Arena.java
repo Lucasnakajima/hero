@@ -6,15 +6,16 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.screen.Screen;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class Arena {
     private int height;
     private int width;
     Hero hero = new Hero(10, 10);
-    private List<Wall> walls;
+    private List<Wall> walls = new ArrayList<Wall>();
 
     Arena(int h, int w) {
         this.height = h;
@@ -61,13 +62,15 @@ public class Arena {
     private boolean canHeroMove(Position position) {
         Hero temphero = new Hero(hero.getPosition().getX(), hero.getPosition().getY());
         temphero.setPosition(position);
-        return temphero.getPosition().getY() < getHeight() && temphero.getPosition().getX() < getWidth() && temphero.getPosition().getY() >= 0 && temphero.getPosition().getX() >= 0;
+        return temphero.getPosition().getY() < getHeight()-1 && temphero.getPosition().getX() < getWidth()-1 && temphero.getPosition().getY() > 0 && temphero.getPosition().getX() > 0;
     }
 
-    public void draw(TextGraphics graphics){
+    public void draw(final TextGraphics graphics){
         graphics.setBackgroundColor(TextColor.Factory.fromString("Red"));
                 graphics.fillRectangle(new TerminalPosition(0, 0), new
                         TerminalSize(width, height), ' ');
+        for (Wall wall : walls)
+            wall.draw(graphics);
         hero.draw(graphics);
     }
 

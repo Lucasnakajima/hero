@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class Game {
     private Screen screen;
-    Arena arena = new Arena(40, 20);
+    Arena arena = new Arena(20, 40);
     Game() {
         try {
             TerminalSize terminalSize = new TerminalSize(40, 20);
