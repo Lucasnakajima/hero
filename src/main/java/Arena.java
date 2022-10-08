@@ -45,7 +45,6 @@ public class Arena {
     }
 
     public void processKey(KeyStroke key, Screen screen) throws IOException {
-        verifyMonsterCollisions(screen);
         switch (key.getKeyType()) {
             case ArrowUp -> moveHero(hero.moveUp());
             case ArrowDown -> moveHero(hero.moveDown());
@@ -57,8 +56,9 @@ public class Arena {
                 }
             }
         }
+        verifyMonsterCollisions();
         moveMonsters();
-        verifyMonsterCollisions(screen);
+        verifyMonsterCollisions();
     }
 
     public void moveHero(Position position) {
@@ -141,7 +141,7 @@ public class Arena {
     private List<Monster> createMonsters() {
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 5; i++){
             boolean ND = false;
             Monster tempm = new Monster(random.nextInt(width - 2) + 1,
                     random.nextInt(height - 2) + 1);
@@ -171,16 +171,19 @@ public class Arena {
     }
 
     private void moveMonsters(){
-        for(Monster monster : monsters) monster.move(hero);
+        for(Monster monster : monsters){
+            Position monsterPosition = monster.move();
+            if(canHeroMove(monsterPosition)) monster.setPosition(monsterPosition);
+        }
     }
 
-    private void verifyMonsterCollisions(Screen screen) throws IOException {
+    private void verifyMonsterCollisions() throws IOException {
         for(Monster monster : monsters){
-            if(monster.getPosition().equals(hero.getPosition())) {
-                System.out.print("You collected: ");
+            if(monster.getY()==hero.getY() && monster.getX()== hero.getX()) {
+                System.out.print("You lost with ");
                 System.out.print(hero.getCoins());
                 System.out.println(" Coins!");
-                screen.close();
+                System.exit(0);
             }
         }
     }

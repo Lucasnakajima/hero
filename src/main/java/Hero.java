@@ -1,9 +1,7 @@
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.screen.Screen;
 
 public class Hero extends Element{
 
@@ -26,6 +24,10 @@ public class Hero extends Element{
 
     public void addcoin(){
         coins++;
+        if(coins==5){
+            System.out.println("You won collecting all 5 coins!");
+            System.exit(0);
+        }
     }
 
     public Position moveUp(){
